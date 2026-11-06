@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import AiAdvice from "@/components/AiAdvice";
 import {
   calculateHourlyRate,
   DEFAULT_INPUT,
@@ -115,7 +116,7 @@ export default function Home() {
                 </p>
               )}
             </div>
-
+<AiAdvice input={input} currentRate={currentRate} />
             {/* Addım 5-də bu düymə HubSpot formasını açacaq */}
             <button
               type="button"
