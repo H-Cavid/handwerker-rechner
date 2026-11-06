@@ -8,6 +8,8 @@ import {
   type CalculatorInput,
 } from "@/lib/calculator";
 
+import LeadForm from "@/components/LeadForm";
+
 // Hər input sahəsinin təsviri: hansı açar, hansı yazı, hansı vahid
 type FieldConfig = {
   key: keyof CalculatorInput;
@@ -116,14 +118,8 @@ export default function Home() {
                 </p>
               )}
             </div>
-<AiAdvice input={input} currentRate={currentRate} />
-            {/* Addım 5-də bu düymə HubSpot formasını açacaq */}
-            <button
-              type="button"
-              className="mt-6 w-full rounded-lg bg-orange-500 px-4 py-3 font-semibold text-white hover:bg-orange-600"
-            >
-              Ausführlichen PDF-Report per E-Mail erhalten
-            </button>
+            <AiAdvice input={input} currentRate={currentRate} />
+            <LeadForm />
           </aside>
         </div>
       </div>
