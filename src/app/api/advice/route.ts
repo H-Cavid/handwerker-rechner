@@ -18,10 +18,11 @@ const MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
 
 // Hər dil üçün öz təlimatı
 const LANGUAGE_NAMES: Record<Locale, string> = {
-  de: "Deutsch",
-  it: "Italiano",
+  de: "German",
+  it: "Italian",
   en: "English",
 };
+
 const INSTRUCTIONS: Record<Locale, string> = {
   de:
     "Du bist ein erfahrener Betriebsberater für Handwerksbetriebe in Deutschland. " +
@@ -64,16 +65,19 @@ export async function POST(request: Request) {
 
     const r = calculateHourlyRate(input, DICTIONARIES[locale].vatRate);
 
-    const prompt = `Daten eines Handwerksbetriebs:
-- Jährliche Kosten: ${euro(r.totalCosts)} (davon Unternehmerlohn ${euro(input.ownerSalary)}, Fahrzeug ${euro(input.vehicleCosts)}, Versicherungen ${euro(input.insuranceCosts)}, Werkzeug ${euro(input.toolCosts)}, Sonstiges ${euro(input.otherCosts)}, Mitarbeiterlöhne ${euro(input.employeeWages)})
-- Produktive Personen: ${input.workers}
-- Arbeitstage pro Person: ${r.workDays}, ${input.hoursPerDay} Std./Tag
-- Abrechenbarer Zeitanteil: ${input.billableSharePercent} %
-- Abrechenbare Stunden/Jahr: ${Math.round(r.billableHours)}
-- Mindest-Stundensatz netto (inkl. ${input.profitPercent} % Gewinn): ${euro(r.netRate)}
-- Aktueller Stundensatz: ${euro(currentRate)}
 
-Gib eine kurze, persönliche Einschätzung: Wo liegt der größte Hebel (Preis, abrechenbare Zeit oder Kosten)? Nenne eine konkrete Maßnahme für die nächsten 30 Tage. Answer language: ${LANGUAGE_NAMES[locale]}.`;
+    const prompt = `Data of a trade business (Handwerk):
+- Annual costs: ${euro(r.totalCosts)} (owner salary ${euro(input.ownerSalary)}, vehicle ${euro(input.vehicleCosts)}, insurance ${euro(input.insuranceCosts)}, tools ${euro(input.toolCosts)}, other ${euro(input.otherCosts)}, employee wages ${euro(input.employeeWages)})
+- Productive people: ${input.workers}
+- Working days per person: ${r.workDays}, ${input.hoursPerDay} h/day
+- Billable share of time: ${input.billableSharePercent} %
+- Billable hours per year: ${Math.round(r.billableHours)}
+- Minimum net hourly rate (incl. ${input.profitPercent} % profit): ${euro(r.netRate)}
+- Current hourly rate: ${euro(currentRate)}
+
+Give a short, personal assessment: where is the biggest lever (price, billable time or costs)? Name one concrete action for the next 30 days.
+
+IMPORTANT: Write your entire answer in ${LANGUAGE_NAMES[locale]} only.`;
 
     const response = await ai.models.generateContent({
       model: MODEL,
