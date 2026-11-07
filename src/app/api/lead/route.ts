@@ -13,7 +13,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
   try {
-    const { email, firstName, pageUri } = await request.json();
+    const { email, firstName, pageUri, locale } = await request.json();
 
     if (typeof email !== "string" || !EMAIL_RE.test(email.trim())) {
       return NextResponse.json(
@@ -35,7 +35,10 @@ export async function POST(request: Request) {
         fields,
         context: {
           pageUri: typeof pageUri === "string" ? pageUri : undefined,
-          pageName: "Stundensatz-Rechner",
+          pageName:
+            locale === "it" ? "Calcolatore tariffa oraria"
+            : locale === "en" ? "Hourly Rate Calculator"
+            : "Stundensatz-Rechner",
         },
       }),
     });

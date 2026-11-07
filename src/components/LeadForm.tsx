@@ -2,47 +2,44 @@
 "use client";
 
 import { useState } from "react";
+import { DICTIONARIES, type Locale } from "@/lib/i18n";
 import { track } from "@/lib/track";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-export default function LeadForm() {
+export default function LeadForm({ locale }: { locale: Locale }) {
+  const t = DICTIONARIES[locale].lead;
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault(); // Səhifənin yenidən yüklənməsinin qarşısını alır
+    e.preventDefault();
     setStatus("loading");
-    setErrorMsg("");
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, firstName, pageUri: window.location.href }),
+        body: JSON.stringify({ email, firstName, locale, pageUri: window.location.href }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error();
       setStatus("success");
       track("lead_submitted");
-    } catch (err) {
+    } catch {
       setStatus("error");
-      setErrorMsg(err instanceof Error && err.message ? err.message : "Bitte später erneut versuchen.");
     }
   }
 
-  // 1) Uğurlu göndərişdən sonra
   if (status === "success") {
     return (
       <p className="mt-6 rounded-lg bg-green-500/15 p-4 text-sm text-green-200">
-        Danke{firstName ? `, ${firstName}` : ""}! Ihre Anfrage ist eingegangen. ✅
+        {t.thanks}
+        {firstName ? `, ${firstName}` : ""}! {t.received} ✅
       </p>
     );
   }
 
-  // 2) Forma bağlıdır → yalnız narıncı düymə
   if (!open) {
     return (
       <button
@@ -53,17 +50,16 @@ export default function LeadForm() {
         }}
         className="mt-6 w-full rounded-lg bg-orange-500 px-4 py-3 font-semibold text-white hover:bg-orange-600"
       >
-        Ausführlichen PDF-Report per E-Mail erhalten
+        {t.cta}
       </button>
     );
   }
 
-  // 3) Forma açıqdır
   return (
     <form onSubmit={handleSubmit} className="mt-6 space-y-3">
       <input
         type="text"
-        placeholder="Vorname"
+        placeholder={t.firstName}
         value={firstName}
         onChange={(e) => setFirstName(e.target.value)}
         className="w-full rounded-lg bg-slate-800 px-3 py-2 text-white outline-none ring-1 ring-slate-600 focus:ring-2 focus:ring-orange-400"
@@ -71,7 +67,7 @@ export default function LeadForm() {
       <input
         type="email"
         required
-        placeholder="E-Mail-Adresse *"
+        placeholder={t.email}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="w-full rounded-lg bg-slate-800 px-3 py-2 text-white outline-none ring-1 ring-slate-600 focus:ring-2 focus:ring-orange-400"
@@ -81,12 +77,10 @@ export default function LeadForm() {
         disabled={status === "loading"}
         className="w-full rounded-lg bg-orange-500 px-4 py-3 font-semibold text-white hover:bg-orange-600 disabled:opacity-60"
       >
-        {status === "loading" ? "Wird gesendet…" : "Report anfordern"}
+        {status === "loading" ? t.sending : t.submit}
       </button>
-      {status === "error" && <p className="text-sm text-red-300">{errorMsg}</p>}
-      <p className="text-xs leading-snug text-slate-400">
-        Mit dem Absenden stimmen Sie zu, dass wir Sie per E-Mail kontaktieren. Abmeldung jederzeit möglich.
-      </p>
+      {status === "error" && <p className="text-sm text-red-300">{t.error}</p>}
+      <p className="text-xs leading-snug text-slate-400">{t.consent}</p>
     </form>
   );
 }

@@ -3,15 +3,17 @@
 
 import { useState } from "react";
 import type { CalculatorInput } from "@/lib/calculator";
+import { DICTIONARIES, type Locale } from "@/lib/i18n";
 import { track } from "@/lib/track";
-
 
 type Props = {
   input: CalculatorInput;
   currentRate: number;
+  locale: Locale;
 };
 
-export default function AiAdvice({ input, currentRate }: Props) {
+export default function AiAdvice({ input, currentRate, locale }: Props) {
+  const t = DICTIONARIES[locale].ai;
   const [advice, setAdvice] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -25,13 +27,13 @@ export default function AiAdvice({ input, currentRate }: Props) {
       const res = await fetch("/api/advice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input, currentRate }),
+        body: JSON.stringify({ input, currentRate, locale }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setAdvice(data.advice);
     } catch {
-      setError("Die KI-Empfehlung ist gerade nicht verfügbar. Bitte versuchen Sie es später erneut.");
+      setError(t.error);
     } finally {
       setLoading(false);
     }
@@ -45,7 +47,7 @@ export default function AiAdvice({ input, currentRate }: Props) {
         disabled={loading}
         className="w-full rounded-lg border border-orange-400 px-4 py-3 font-semibold text-orange-300 hover:bg-orange-400/10 disabled:cursor-wait disabled:opacity-60"
       >
-        {loading ? "KI analysiert Ihre Zahlen…" : "✨ Persönliche KI-Empfehlung"}
+        {loading ? t.loading : t.button}
       </button>
 
       {advice && (

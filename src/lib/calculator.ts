@@ -57,7 +57,7 @@ export const DEFAULT_INPUT: CalculatorInput = {
 // 2 rəqəm vergüldən sonra yuvarlaqlaşdırma
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
-export function calculateHourlyRate(input: CalculatorInput): CalculatorResult {
+export function calculateHourlyRate(input: CalculatorInput, vatRate = VAT): CalculatorResult {
   // 1) İllik xərclər
   const wageCosts = input.employeeWages * (1 + input.wageOverheadPercent / 100);
   const totalCosts =
@@ -91,7 +91,7 @@ export function calculateHourlyRate(input: CalculatorInput): CalculatorResult {
   // 3) Qiymətlər
   const costPerHour = totalCosts / billableHours;
   const netRate = costPerHour * (1 + input.profitPercent / 100);
-  const grossRate = netRate * (1 + VAT);
+  const grossRate = netRate * (1 + vatRate);
 
   return {
     totalCosts: round2(totalCosts),
