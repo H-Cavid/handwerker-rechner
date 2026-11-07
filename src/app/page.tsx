@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AiAdvice from "@/components/AiAdvice";
 import {
   calculateHourlyRate,
@@ -9,6 +9,7 @@ import {
 } from "@/lib/calculator";
 
 import LeadForm from "@/components/LeadForm";
+import { track } from "@/lib/track";
 
 // Hər input sahəsinin təsviri: hansı açar, hansı yazı, hansı vahid
 type FieldConfig = {
@@ -19,13 +20,33 @@ type FieldConfig = {
 };
 
 const COST_FIELDS: FieldConfig[] = [
-  { key: "ownerSalary", label: "Unternehmerlohn (Ihr Wunschgehalt)", unit: "€/Jahr", step: 1000 },
-  { key: "employeeWages", label: "Bruttolöhne Mitarbeiter", unit: "€/Jahr", step: 1000 },
+  {
+    key: "ownerSalary",
+    label: "Unternehmerlohn (Ihr Wunschgehalt)",
+    unit: "€/Jahr",
+    step: 1000,
+  },
+  {
+    key: "employeeWages",
+    label: "Bruttolöhne Mitarbeiter",
+    unit: "€/Jahr",
+    step: 1000,
+  },
   { key: "wageOverheadPercent", label: "Lohnnebenkosten", unit: "%" },
   { key: "vehicleCosts", label: "Fahrzeugkosten", unit: "€/Jahr", step: 500 },
   { key: "insuranceCosts", label: "Versicherungen", unit: "€/Jahr", step: 500 },
-  { key: "toolCosts", label: "Werkzeug & Maschinen", unit: "€/Jahr", step: 500 },
-  { key: "otherCosts", label: "Büro, Miete, Software, Steuerberater", unit: "€/Jahr", step: 500 },
+  {
+    key: "toolCosts",
+    label: "Werkzeug & Maschinen",
+    unit: "€/Jahr",
+    step: 500,
+  },
+  {
+    key: "otherCosts",
+    label: "Büro, Miete, Software, Steuerberater",
+    unit: "€/Jahr",
+    step: 500,
+  },
 ];
 
 const TIME_FIELDS: FieldConfig[] = [
@@ -39,21 +60,32 @@ const TIME_FIELDS: FieldConfig[] = [
 ];
 
 // Rəqəmləri alman formatında göstərmək üçün: 1.234,56 €
-const euro = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
+const euro = new Intl.NumberFormat("de-DE", {
+  style: "currency",
+  currency: "EUR",
+});
 const num = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 });
 
 export default function Home() {
   // State: istifadəçinin yazdığı dəyərlər. Dəyişəndə səhifə yenidən hesablanır.
   const [input, setInput] = useState<CalculatorInput>(DEFAULT_INPUT);
   const [currentRate, setCurrentRate] = useState(50); // Hazırda aldığı qiymət
+  const startedRef = useRef(false); // calc_started yalnız bir dəfə göndərilsin
 
   const result = calculateHourlyRate(input);
   const gapPerHour = result.netRate - currentRate;
   const gapPerYear = gapPerHour * result.billableHours;
 
   function update(key: keyof CalculatorInput, value: string) {
+    if (!startedRef.current) {
+      startedRef.current = true;
+      track("calc_started", { field: key });
+    }
     const n = Number(value);
-    setInput((prev) => ({ ...prev, [key]: Number.isFinite(n) && n >= 0 ? n : 0 }));
+    setInput((prev) => ({
+      ...prev,
+      [key]: Number.isFinite(n) && n >= 0 ? n : 0,
+    }));
   }
 
   return (
@@ -67,50 +99,82 @@ export default function Home() {
             Welcher Stundensatz deckt wirklich Ihre Kosten?
           </h1>
           <p className="mt-3 max-w-2xl text-slate-600">
-            Viele Betriebe kalkulieren nach Gefühl – und verschenken jedes Jahr tausende Euro.
-            Tragen Sie Ihre Zahlen ein und sehen Sie sofort Ihren echten Mindest-Stundensatz.
+            Viele Betriebe kalkulieren nach Gefühl – und verschenken jedes Jahr
+            tausende Euro. Tragen Sie Ihre Zahlen ein und sehen Sie sofort Ihren
+            echten Mindest-Stundensatz.
           </p>
         </header>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
           <div className="space-y-6">
-            <Section title="1. Ihre Kosten pro Jahr" fields={COST_FIELDS} input={input} onChange={update} />
-            <Section title="2. Ihre Arbeitszeit" fields={TIME_FIELDS} input={input} onChange={update} />
+            <Section
+              title="1. Ihre Kosten pro Jahr"
+              fields={COST_FIELDS}
+              input={input}
+              onChange={update}
+            />
+            <Section
+              title="2. Ihre Arbeitszeit"
+              fields={TIME_FIELDS}
+              input={input}
+              onChange={update}
+            />
           </div>
 
           <aside className="h-fit rounded-2xl bg-slate-900 p-6 text-white lg:sticky lg:top-6">
-            <p className="text-sm text-slate-300">Ihr Mindest-Stundensatz (netto)</p>
-            <p className="mt-1 text-5xl font-bold text-orange-400">{euro.format(result.netRate)}</p>
+            <p className="text-sm text-slate-300">
+              Ihr Mindest-Stundensatz (netto)
+            </p>
+            <p className="mt-1 text-5xl font-bold text-orange-400">
+              {euro.format(result.netRate)}
+            </p>
             <p className="mt-1 text-sm text-slate-400">
               {euro.format(result.grossRate)} inkl. 19 % MwSt.
             </p>
 
             <dl className="mt-6 space-y-2 border-t border-slate-700 pt-4 text-sm">
-              <Row label="Nur Kostendeckung (ohne Gewinn)" value={euro.format(result.costPerHour)} />
-              <Row label="Jährliche Kosten" value={euro.format(result.totalCosts)} />
-              <Row label="Abrechenbare Stunden / Jahr" value={num.format(result.billableHours)} />
-              <Row label="Arbeitstage pro Person" value={num.format(result.workDays)} />
+              <Row
+                label="Nur Kostendeckung (ohne Gewinn)"
+                value={euro.format(result.costPerHour)}
+              />
+              <Row
+                label="Jährliche Kosten"
+                value={euro.format(result.totalCosts)}
+              />
+              <Row
+                label="Abrechenbare Stunden / Jahr"
+                value={num.format(result.billableHours)}
+              />
+              <Row
+                label="Arbeitstage pro Person"
+                value={num.format(result.workDays)}
+              />
             </dl>
 
             <div className="mt-6 border-t border-slate-700 pt-4">
               <label className="block text-sm text-slate-300">
                 Was berechnen Sie aktuell pro Stunde?
                 <div className="mt-1 flex items-center rounded-lg bg-slate-800 ring-1 ring-slate-600 focus-within:ring-2 focus-within:ring-orange-400">
-                  <input
-                    type="number"
-                    min={0}
+                  <NumberInput
                     value={currentRate}
-                    onChange={(e) => setCurrentRate(Math.max(0, Number(e.target.value) || 0))}
+                    onChange={(raw) => {
+                      if (!startedRef.current) {
+                        startedRef.current = true;
+                        track("calc_started", { field: "currentRate" });
+                      }
+                      setCurrentRate(Math.max(0, Number(raw) || 0));
+                    }}
                     className="w-full bg-transparent px-3 py-2 text-white outline-none"
-                  />
+                  />  
                   <span className="pr-3 text-slate-400">€</span>
                 </div>
               </label>
 
               {gapPerHour > 0 ? (
                 <p className="mt-3 rounded-lg bg-red-500/15 p-3 text-sm text-red-200">
-                  Sie liegen <strong>{euro.format(gapPerHour)}</strong> pro Stunde unter Ihrem
-                  Mindestsatz – das sind ca. <strong>{euro.format(gapPerYear)}</strong> im Jahr.
+                  Sie liegen <strong>{euro.format(gapPerHour)}</strong> pro
+                  Stunde unter Ihrem Mindestsatz – das sind ca.{" "}
+                  <strong>{euro.format(gapPerYear)}</strong> im Jahr.
                 </p>
               ) : (
                 <p className="mt-3 rounded-lg bg-green-500/15 p-3 text-sm text-green-200">
@@ -148,15 +212,15 @@ function Section({
           <label key={f.key} className="block">
             <span className="text-sm text-slate-600">{f.label}</span>
             <div className="mt-1 flex items-center rounded-lg ring-1 ring-slate-300 focus-within:ring-2 focus-within:ring-orange-500">
-              <input
-                type="number"
-                min={0}
-                step={f.step ?? 1}
+              <NumberInput
                 value={input[f.key]}
-                onChange={(e) => onChange(f.key, e.target.value)}
+                step={f.step}
+                onChange={(raw) => onChange(f.key, raw)}
                 className="w-full rounded-lg bg-transparent px-3 py-2 outline-none"
               />
-              <span className="whitespace-nowrap pr-3 text-sm text-slate-400">{f.unit}</span>
+              <span className="whitespace-nowrap pr-3 text-sm text-slate-400">
+                {f.unit}
+              </span>
             </div>
           </label>
         ))}
@@ -171,5 +235,37 @@ function Row({ label, value }: { label: string; value: string }) {
       <dt className="text-slate-400">{label}</dt>
       <dd className="font-medium">{value}</dd>
     </div>
+  );
+}
+// Rəqəm sahəsi: yazılan mətni ayrıca saxlayır ki, sahəni boşaltmaq mümkün olsun
+// və "088" kimi qəribə görüntülər yaranmasın.
+function NumberInput({
+  value,
+  onChange,
+  step,
+  className,
+}: {
+  value: number;
+  onChange: (raw: string) => void;
+  step?: number;
+  className?: string;
+}) {
+  const [text, setText] = useState(String(value));
+
+  return (
+    <input
+      type="number"
+      inputMode="decimal" // Telefonda rəqəm klaviaturası açılır
+      min={0}
+      step={step ?? 1}
+      value={text}
+      onChange={(e) => {
+        setText(e.target.value);
+        onChange(e.target.value);
+      }}
+      // Sahədən çıxanda: boşdursa "0", "088" isə "88" olur
+      onBlur={() => setText(text === "" ? "0" : String(Number(text)))}
+      className={className}
+    />
   );
 }

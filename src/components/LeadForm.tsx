@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@/lib/track";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -25,6 +26,7 @@ export default function LeadForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setStatus("success");
+      track("lead_submitted");
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error && err.message ? err.message : "Bitte später erneut versuchen.");
@@ -45,7 +47,10 @@ export default function LeadForm() {
     return (
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+          track("lead_form_opened");
+        }}
         className="mt-6 w-full rounded-lg bg-orange-500 px-4 py-3 font-semibold text-white hover:bg-orange-600"
       >
         Ausführlichen PDF-Report per E-Mail erhalten

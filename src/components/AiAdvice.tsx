@@ -3,6 +3,8 @@
 
 import { useState } from "react";
 import type { CalculatorInput } from "@/lib/calculator";
+import { track } from "@/lib/track";
+
 
 type Props = {
   input: CalculatorInput;
@@ -15,6 +17,7 @@ export default function AiAdvice({ input, currentRate }: Props) {
   const [error, setError] = useState("");
 
   async function getAdvice() {
+    track("ai_advice_requested");
     setLoading(true);
     setError("");
     setAdvice("");
