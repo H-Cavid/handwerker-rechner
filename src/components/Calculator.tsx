@@ -12,6 +12,8 @@ import { DICTIONARIES, type Field, type Locale } from "@/lib/i18n";
 import { track } from "@/lib/track";
 import AiAdvice from "@/components/AiAdvice";
 import LeadForm from "@/components/LeadForm";
+import ConsentBanner from "@/components/ConsentBanner";
+
 
 export default function Calculator({ locale }: { locale: Locale }) {
   const t = DICTIONARIES[locale];
@@ -117,6 +119,7 @@ export default function Calculator({ locale }: { locale: Locale }) {
           </aside>
         </div>
       </div>
+    <ConsentBanner locale={locale} />
     </main>
   );
 }

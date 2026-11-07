@@ -3,6 +3,7 @@
 
 import mixpanel from "mixpanel-browser";
 import { sendGAEvent } from "@next/third-parties/google";
+import { getConsent } from "@/lib/consent";
 
 const MP_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -33,7 +34,7 @@ export function track(
   const data = { ...props, locale: document.documentElement.lang || "de" };
 
   if (mpReady) mixpanel.track(event, data);
-  if (GA_ID) sendGAEvent("event", event, data);
+  if (GA_ID && getConsent() === "granted") sendGAEvent("event", event, data);
 
   if (process.env.NODE_ENV === "development") console.log("[track]", event, data);
 }
