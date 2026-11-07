@@ -94,7 +94,7 @@ const de: Dictionary = {
     error: "Die KI-Empfehlung ist gerade nicht verfügbar. Bitte versuchen Sie es später erneut.",
   },
   lead: {
-    cta: "Ausführlichen PDF-Report per E-Mail erhalten",
+    cta: "Ausführlichen PDF-Report herunterladen",
     firstName: "Vorname",
     email: "E-Mail-Adresse *",
     submit: "Report anfordern",
@@ -152,7 +152,7 @@ const it: Dictionary = {
     error: "Il consiglio dell'IA non è disponibile al momento. Riprova più tardi.",
   },
   lead: {
-    cta: "Ricevi il report PDF dettagliato via e-mail",
+    cta: "Scarica il report PDF dettagliato",
     firstName: "Nome",
     email: "Indirizzo e-mail *",
     submit: "Richiedi il report",
@@ -210,7 +210,7 @@ const en: Dictionary = {
     error: "The AI recommendation is unavailable right now. Please try again later.",
   },
   lead: {
-    cta: "Get the detailed PDF report by email",
+    cta: "Download the detailed PDF report",
     firstName: "First name",
     email: "Email address *",
     submit: "Request report",
