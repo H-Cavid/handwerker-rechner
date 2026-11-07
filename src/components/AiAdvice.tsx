@@ -10,9 +10,10 @@ type Props = {
   input: CalculatorInput;
   currentRate: number;
   locale: Locale;
+  onAdvice?: (advice: string) => void;
 };
 
-export default function AiAdvice({ input, currentRate, locale }: Props) {
+export default function AiAdvice({ input, currentRate, locale, onAdvice }: Props) {
   const t = DICTIONARIES[locale].ai;
   const [advice, setAdvice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,7 @@ export default function AiAdvice({ input, currentRate, locale }: Props) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setAdvice(data.advice);
+      onAdvice?.(data.advice);
     } catch {
       setError(t.error);
     } finally {

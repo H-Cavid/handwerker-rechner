@@ -43,6 +43,7 @@ export type Dictionary = {
     sending: string;
     thanks: string;
     received: string;
+    download: string;
     consent: string;
     error: string;
   };
@@ -100,6 +101,7 @@ const de: Dictionary = {
     sending: "Wird gesendet…",
     thanks: "Danke",
     received: "Ihre Anfrage ist eingegangen.",
+    download: "📄 PDF-Report herunterladen",
     consent: "Mit dem Absenden stimmen Sie zu, dass wir Sie per E-Mail kontaktieren. Abmeldung jederzeit möglich.",
     error: "Übermittlung fehlgeschlagen. Bitte versuchen Sie es später erneut.",
   },
@@ -157,6 +159,7 @@ const it: Dictionary = {
     sending: "Invio in corso…",
     thanks: "Grazie",
     received: "La tua richiesta è stata ricevuta.",
+    download: "📄 Scarica il report PDF",
     consent: "Inviando il modulo accetti di essere contattato via e-mail. Puoi annullare l'iscrizione in qualsiasi momento.",
     error: "Invio non riuscito. Riprova più tardi.",
   },
@@ -214,6 +217,7 @@ const en: Dictionary = {
     sending: "Sending…",
     thanks: "Thank you",
     received: "Your request has been received.",
+    download: "📄 Download PDF report",
     consent: "By submitting, you agree that we may contact you by email. You can unsubscribe at any time.",
     error: "Submission failed. Please try again later.",
   },

@@ -13,6 +13,7 @@ import { track } from "@/lib/track";
 import AiAdvice from "@/components/AiAdvice";
 import LeadForm from "@/components/LeadForm";
 import ConsentBanner from "@/components/ConsentBanner";
+import SiteFooter from "@/components/SiteFooter";
 
 
 export default function Calculator({ locale }: { locale: Locale }) {
@@ -22,6 +23,7 @@ export default function Calculator({ locale }: { locale: Locale }) {
 
   const [input, setInput] = useState<CalculatorInput>(DEFAULT_INPUT);
   const [currentRate, setCurrentRate] = useState(50);
+  const [advice, setAdvice] = useState(""); // AI tövsiyəsi PDF üçün
   const startedRef = useRef(false); // calc_started yalnız bir dəfə
 
   // <html lang> dilə uyğunlaşsın (track() locale-i buradan oxuyur)
@@ -114,11 +116,18 @@ export default function Calculator({ locale }: { locale: Locale }) {
               )}
             </div>
 
-            <AiAdvice input={input} currentRate={currentRate} locale={locale} />
-            <LeadForm locale={locale} />
+            <AiAdvice input={input} currentRate={currentRate} locale={locale} onAdvice={setAdvice} />
+            <LeadForm
+              locale={locale}
+              input={input}
+              result={result}
+              currentRate={currentRate}
+              advice={advice}
+            />
           </aside>
         </div>
       </div>
+            <SiteFooter locale={locale} />
     <ConsentBanner locale={locale} />
     </main>
   );

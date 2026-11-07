@@ -24,7 +24,8 @@ export type TrackEvent =
   | "calc_started"
   | "ai_advice_requested"
   | "lead_form_opened"
-  | "lead_submitted";
+  | "lead_submitted"
+  | "report_downloaded";
 
 export function track(
   event: TrackEvent,
