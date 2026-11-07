@@ -31,7 +31,7 @@ export default function LeadForm({ locale, input, result, currentRate, advice }:
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, firstName, locale, pageUri: window.location.href }),
+        body: JSON.stringify({ email, firstName, locale, pageUri: window.location.href, input, currentRate }),
       });
       if (!res.ok) throw new Error();
       setStatus("success");
