@@ -79,16 +79,30 @@ Give a short, personal assessment: where is the biggest lever (price, billable t
 
 IMPORTANT: Write your entire answer in ${LANGUAGE_NAMES[locale]} only.`;
 
-    const response = await ai.models.generateContent({
-      model: MODEL,
-      contents: prompt,
-      config: { systemInstruction: INSTRUCTIONS[locale] },
-    });
 
-    // Markdown simvollarını təmizləyirik
-    const advice = (response.text ?? "").replace(/[*_#]/g, "").trim();
-    if (!advice) throw new Error("Empty response");
 
+        // Əsas model alınmasa (429 limit / 503 yüklənmə), ehtiyat modelə keçirik
+    const models = [MODEL, "gemini-2.5-flash-lite"];
+    let advice = "";
+    let lastError: unknown;
+
+    for (const model of models) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: { systemInstruction: INSTRUCTIONS[locale] },
+        });
+        // Markdown simvollarını təmizləyirik
+        advice = (response.text ?? "").replace(/[*_#]/g, "").trim();
+        if (advice) break;
+      } catch (err) {
+        lastError = err;
+        console.warn(`Model ${model} failed, trying next`, err);
+      }
+    }
+
+    if (!advice) throw lastError ?? new Error("Empty response");
     return NextResponse.json({ advice });
   } catch (error) {
     console.error("AI advice error:", error);
