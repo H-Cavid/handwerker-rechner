@@ -6,7 +6,7 @@ A free hourly-rate calculator for craft businesses. Owners enter their yearly co
 
 I built it as a self-initiated growth experiment to practise the full loop of AI-powered acquisition: ship a working tool, connect it to the CRM, measure the funnel, and define what to test next.
 
-> Personal demo project – not affiliated with any software vendor. Built with Claude as an AI coding assistant; every part was reviewed and tested by me.
+> Personal demo project – not affiliated with any software vendor.
 
 ---
 
