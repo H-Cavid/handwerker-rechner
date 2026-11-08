@@ -48,7 +48,7 @@ function leadTier(annualGap: number, teamSize: number): "A" | "B" | "C" {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, firstName, pageUri, input, currentRate } = body ?? {};
+    const { email, firstName, input, currentRate } = body ?? {};
     const locale: Locale = ["de", "it", "en"].includes(body?.locale) ? body.locale : "de";
 
     if (typeof email !== "string" || !EMAIL_RE.test(email.trim())) {
@@ -84,7 +84,6 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           fields,
           context: {
-            pageUri: typeof pageUri === "string" ? pageUri : undefined,
             pageName: PAGE_NAMES[locale],
           },
         }),
