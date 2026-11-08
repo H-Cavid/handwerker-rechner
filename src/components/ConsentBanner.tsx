@@ -21,6 +21,16 @@ const TEXT: Record<Locale, { text: string; accept: string; decline: string }> = 
     accept: "Accept",
     decline: "Decline",
   },
+  es: {
+    text: "Usamos Google Analytics y Mixpanel para entender cómo se utiliza la calculadora. Los datos que introduces y tu correo electrónico no se envían a estos servicios.",
+    accept: "Aceptar",
+    decline: "Rechazar",
+  },
+  nl: {
+    text: "We gebruiken Google Analytics en Mixpanel om te begrijpen hoe de calculator wordt gebruikt. Je invoer en je e-mailadres worden niet naar deze diensten gestuurd.",
+    accept: "Accepteren",
+    decline: "Weigeren",
+  },
 };
 
 export default function ConsentBanner({ locale }: { locale: Locale }) {

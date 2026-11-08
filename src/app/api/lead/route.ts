@@ -7,7 +7,7 @@ import {
   DEFAULT_INPUT,
   type CalculatorInput,
 } from "@/lib/calculator";
-import { DICTIONARIES, type Locale } from "@/lib/i18n";
+import { DICTIONARIES, LOCALES, type Locale } from "@/lib/i18n";
 
 const PORTAL_ID = process.env.HUBSPOT_PORTAL_ID;
 const FORM_ID = process.env.HUBSPOT_FORM_ID;
@@ -21,6 +21,8 @@ const PAGE_NAMES: Record<Locale, string> = {
   de: "Stundensatz-Rechner",
   it: "Calcolatore tariffa oraria",
   en: "Hourly Rate Calculator",
+  es: "Calculadora tarifa por hora",
+  nl: "Uurtarief-calculator",
 };
 
 type Field = { objectTypeId: string; name: string; value: string };
@@ -49,7 +51,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { email, firstName, input, currentRate } = body ?? {};
-    const locale: Locale = ["de", "it", "en"].includes(body?.locale) ? body.locale : "de";
+    const locale: Locale = LOCALES.includes(body?.locale) ? body.locale : "de";
 
     if (typeof email !== "string" || !EMAIL_RE.test(email.trim())) {
       return NextResponse.json({ error: "Invalid email" }, { status: 400 });

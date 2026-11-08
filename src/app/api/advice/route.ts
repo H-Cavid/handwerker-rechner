@@ -8,7 +8,7 @@ import {
   DEFAULT_INPUT,
   type CalculatorInput,
 } from "@/lib/calculator";
-import { DICTIONARIES, type Locale } from "@/lib/i18n";
+import { DICTIONARIES, LOCALES, type Locale } from "@/lib/i18n";
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -21,6 +21,8 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
   de: "German",
   it: "Italian",
   en: "English",
+  es: "Spanish",
+  nl: "Dutch",
 };
 
 const INSTRUCTIONS: Record<Locale, string> = {
@@ -39,6 +41,16 @@ const INSTRUCTIONS: Record<Locale, string> = {
     "Answer in English, in at most 3 short sentences (max. 60 words). " +
     "Concrete and honest, no filler, no Markdown, no bullet points. " +
     "No tax or legal advice.",
+  es:
+    "Eres un asesor experto para empresas de oficios y reformas en España. " +
+    "Responde en español, tuteando, en un máximo de 3 frases cortas (máximo 60 palabras). " +
+    "Concreto y honesto, sin frases hechas, sin Markdown, sin listas. " +
+    "Sin asesoramiento fiscal ni legal.",
+  nl:
+    "Je bent een ervaren bedrijfsadviseur voor vakbedrijven in Nederland. " +
+    "Antwoord in het Nederlands, met je/jij, in maximaal 3 korte zinnen (maximaal 60 woorden). " +
+    "Concreet en eerlijk, geen clichés, geen Markdown, geen opsommingen. " +
+    "Geen fiscaal of juridisch advies.",
 };
 
 function isValidInput(value: unknown): value is CalculatorInput {
@@ -57,7 +69,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { input, currentRate } = body ?? {};
 
-    const locale: Locale = body?.locale === "it" || body?.locale === "en" ? body.locale : "de";
+    const locale: Locale = LOCALES.includes(body?.locale) ? body.locale : "de";
 
     if (!isValidInput(input) || typeof currentRate !== "number") {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });

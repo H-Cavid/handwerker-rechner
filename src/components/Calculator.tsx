@@ -59,6 +59,8 @@ export default function Calculator({ locale }: { locale: Locale }) {
               <LangLink href="/" active={locale === "de"}>DE</LangLink>
               <LangLink href="/it" active={locale === "it"}>IT</LangLink>
               <LangLink href="/en" active={locale === "en"}>EN</LangLink>
+              <LangLink href="/es" active={locale === "es"}>ES</LangLink>
+              <LangLink href="/nl" active={locale === "nl"}>NL</LangLink>
             </nav>
           </div>
           <h1 className="mt-2 text-3xl font-bold sm:text-4xl">{t.title}</h1>

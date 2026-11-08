@@ -38,6 +38,26 @@ const TEXT: Record<Locale, {
     disclaimer: "No guarantee of accuracy. This report does not replace tax or business advice.",
     file: "Hourly-rate-report.pdf",
   },
+  es: {
+    title: "Tu informe personal de tarifa por hora",
+    created: "Creado el",
+    result: "Resultado",
+    inputs: "Tus datos",
+    current: "Tu tarifa actual por hora",
+    advice: "Recomendación",
+    disclaimer: "Información sin garantía. Este informe no sustituye el asesoramiento fiscal o empresarial.",
+    file: "Informe-tarifa-por-hora.pdf",
+  },
+  nl: {
+    title: "Je persoonlijke uurtariefrapport",
+    created: "Gemaakt op",
+    result: "Resultaat",
+    inputs: "Je invoer",
+    current: "Je huidige uurtarief",
+    advice: "Advies",
+    disclaimer: "Alle informatie zonder garantie. Dit rapport vervangt geen fiscaal of bedrijfsadvies.",
+    file: "Uurtarief-rapport.pdf",
+  },
 };
 
 // PDF-in standart şrifti emoji və bəzi xüsusi simvolları dəstəkləmir, onları təmizləyirik

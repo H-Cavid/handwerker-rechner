@@ -1,6 +1,6 @@
 # Stundensatz-Rechner – AI-powered lead magnet for tradespeople
 
-**Live:** https://handwerker-rechner-brown.vercel.app · [Italiano](https://handwerker-rechner-brown.vercel.app/it) · [English](https://handwerker-rechner-brown.vercel.app/en)
+**Live:** https://handwerker-rechner-brown.vercel.app · [Italiano](https://handwerker-rechner-brown.vercel.app/it) · [English](https://handwerker-rechner-brown.vercel.app/en) · [Español](https://handwerker-rechner-brown.vercel.app/es) · [Nederlands](https://handwerker-rechner-brown.vercel.app/nl)
 
 A free hourly-rate calculator for craft businesses. Owners enter their yearly costs and working time and instantly see the **minimum hourly rate** they need to cover costs and make a profit, plus how much revenue they lose per year at their current price. A personalized AI recommendation and a PDF report turn the result into a qualified lead in HubSpot.
 
@@ -36,7 +36,7 @@ The lead route **recalculates the result on the server** (the client is never tr
 | `hr_current_rate` | What the business charges today |
 | `hr_annual_gap` | (required rate − current rate) × billable hours per year |
 | `hr_team_size` | Productive people in the business |
-| `hr_language` | de / it / en |
+| `hr_language` | de / it / en / es / nl |
 | `hr_lead_tier` | **A** = gap ≥ €10,000 or team ≥ 3 · **B** = gap > 0 · **C** = otherwise |
 
 If HubSpot rejects the extra fields, the lead is re-sent with the basic fields only, so no lead is lost.
@@ -45,7 +45,7 @@ If HubSpot rejects the extra fields, the lead is re-sent with the basic fields o
 
 ## Internationalization
 
-German, Italian and English, each with its own copy, number format and VAT (DE 19 %, IT 22 %). Texts, VAT rates and AI language instructions live in one dictionary (`src/lib/i18n.ts`), so adding a market means adding one config block. **Next: Spanish and Dutch** (plancraft's expansion markets).
+German, Italian, English, Spanish and Dutch – each with its own copy, number format and VAT (DE 19 %, IT 22 %, ES 21 %, NL 21 %). Texts, VAT rates and AI language instructions live in one dictionary (`src/lib/i18n.ts`), so adding a market means adding one config block. The Spanish and Dutch versions were added this way after the first three; their texts are AI-assisted translations and would be reviewed by a native speaker before a real launch.
 
 ## AI layer
 
@@ -63,7 +63,7 @@ German, Italian and English, each with its own copy, number format and VAT (DE 1
 
 **Secondary metrics:** share of A/B leads, `report_downloaded` / `lead_submitted`, AI advice usage
 
-**Segments:** country/language, lead tier, team size
+**Segments:** country/language (DE/IT/EN/ES/NL), lead tier, team size
 
 **Success criteria (first 4 weeks or 300 calculations):** ≥ 8 % calculation-to-lead conversion and ≥ 50 % of leads in tier A or B
 
@@ -75,10 +75,10 @@ German, Italian and English, each with its own copy, number format and VAT (DE 1
 
 | # | Experiment | Impact | Confidence | Ease | ICE |
 |---|---|---|---|---|---|
-| 1 | Spanish + Dutch versions with local VAT | 8 | 7 | 8 | 7.7 |
-| 2 | Show the yearly revenue gap *before* the email form vs. only after (A/B test) | 8 | 6 | 8 | 7.3 |
-| 3 | Trade-specific defaults (electrician, plumber, painter) via URL, e.g. `?trade=elektro` | 7 | 6 | 7 | 6.7 |
-| 4 | Automated follow-up email in HubSpot for tier-A leads with a plancraft trial offer | 9 | 6 | 5 | 6.7 |
+| 1 | Show the yearly revenue gap *before* the email form vs. only after (A/B test) | 8 | 6 | 8 | 7.3 |
+| 2 | Trade-specific defaults (electrician, plumber, painter) via URL, e.g. `?trade=elektro` | 7 | 6 | 7 | 6.7 |
+| 3 | Automated follow-up email in HubSpot for tier-A leads with a plancraft trial offer | 9 | 6 | 5 | 6.7 |
+| 4 | Polish version + market-specific defaults (wages, holidays) per country | 6 | 6 | 7 | 6.3 |
 | 5 | "Quote checker": upload a quote, AI flags missing or underpriced items | 9 | 5 | 3 | 5.7 |
 
 ICE = average of Impact, Confidence and Ease (1–10).

@@ -3,7 +3,9 @@
 
 import type { CalculatorInput } from "@/lib/calculator";
 
-export type Locale = "de" | "it" | "en";
+export type Locale = "de" | "it" | "en" | "es" | "nl";
+
+export const LOCALES: Locale[] = ["de", "it", "en", "es", "nl"];
 
 export type Field = {
   key: keyof CalculatorInput;
@@ -223,4 +225,120 @@ const en: Dictionary = {
   },
 };
 
-export const DICTIONARIES: Record<Locale, Dictionary> = { de, it, en };
+const es: Dictionary = {
+  numberLocale: "es-ES",
+  vatRate: 0.21, // IVA en España: 21 %
+  switchLabel: "Idioma",
+  eyebrow: "Calculadora gratuita para profesionales de oficios",
+  title: "¿Qué tarifa por hora cubre de verdad tus costes?",
+  intro:
+    "Muchas empresas calculan a ojo y pierden miles de euros cada año. Introduce tus números y descubre al instante tu tarifa por hora mínima real.",
+  costsTitle: "1. Tus costes anuales",
+  timeTitle: "2. Tu tiempo de trabajo",
+  costFields: [
+    { key: "ownerSalary", label: "Sueldo del titular (ingreso deseado)", unit: "€/año", step: 1000 },
+    { key: "employeeWages", label: "Salarios brutos de empleados", unit: "€/año", step: 1000 },
+    { key: "wageOverheadPercent", label: "Cargas sociales sobre salarios", unit: "%" },
+    { key: "vehicleCosts", label: "Costes del vehículo", unit: "€/año", step: 500 },
+    { key: "insuranceCosts", label: "Seguros", unit: "€/año", step: 500 },
+    { key: "toolCosts", label: "Herramientas y maquinaria", unit: "€/año", step: 500 },
+    { key: "otherCosts", label: "Oficina, alquiler, software, gestoría", unit: "€/año", step: 500 },
+  ],
+  timeFields: [
+    { key: "workers", label: "Personas productivas (incl. tú)", unit: "pers." },
+    { key: "hoursPerDay", label: "Horas de trabajo al día", unit: "h" },
+    { key: "vacationDays", label: "Días de vacaciones", unit: "días" },
+    { key: "sickDays", label: "Días de baja por enfermedad", unit: "días" },
+    { key: "holidays", label: "Días festivos", unit: "días" },
+    { key: "billableSharePercent", label: "Tiempo facturable", unit: "%" },
+    { key: "profitPercent", label: "Beneficio y riesgo", unit: "%" },
+  ],
+  netLabel: "Tu tarifa por hora mínima (sin IVA)",
+  grossSuffix: "IVA 21 % incluido",
+  rowCostOnly: "Solo cubrir costes (sin beneficio)",
+  rowAnnualCosts: "Costes anuales",
+  rowBillableHours: "Horas facturables / año",
+  rowWorkDays: "Días laborables por persona",
+  currentRateLabel: "¿Cuánto cobras actualmente por hora?",
+  gapPrefix: "Estás ",
+  gapMid: " por hora por debajo de tu tarifa mínima: unos ",
+  gapSuffix: " al año.",
+  okText: "Tu tarifa actual cubre costes y beneficio. 👍",
+  ai: {
+    button: "✨ Recomendación personalizada con IA",
+    loading: "La IA está analizando tus números…",
+    error: "La recomendación de IA no está disponible ahora. Inténtalo de nuevo más tarde.",
+  },
+  lead: {
+    cta: "Descargar el informe PDF detallado",
+    firstName: "Nombre",
+    email: "Correo electrónico *",
+    submit: "Solicitar informe",
+    sending: "Enviando…",
+    thanks: "Gracias",
+    received: "Hemos recibido tu solicitud.",
+    download: "📄 Descargar informe PDF",
+    consent: "Al enviar, aceptas que te contactemos por correo electrónico. Puedes darte de baja en cualquier momento.",
+    error: "No se pudo enviar. Inténtalo de nuevo más tarde.",
+  },
+};
+
+const nl: Dictionary = {
+  numberLocale: "nl-NL",
+  vatRate: 0.21, // btw in Nederland: 21 %
+  switchLabel: "Taal",
+  eyebrow: "Gratis calculator voor vakmensen",
+  title: "Welk uurtarief dekt echt je kosten?",
+  intro:
+    "Veel bedrijven rekenen op gevoel – en laten elk jaar duizenden euro's liggen. Vul je cijfers in en zie direct je echte minimale uurtarief.",
+  costsTitle: "1. Je jaarlijkse kosten",
+  timeTitle: "2. Je werktijd",
+  costFields: [
+    { key: "ownerSalary", label: "Ondernemersloon (gewenst inkomen)", unit: "€/jaar", step: 1000 },
+    { key: "employeeWages", label: "Brutolonen medewerkers", unit: "€/jaar", step: 1000 },
+    { key: "wageOverheadPercent", label: "Werkgeverslasten", unit: "%" },
+    { key: "vehicleCosts", label: "Voertuigkosten", unit: "€/jaar", step: 500 },
+    { key: "insuranceCosts", label: "Verzekeringen", unit: "€/jaar", step: 500 },
+    { key: "toolCosts", label: "Gereedschap & machines", unit: "€/jaar", step: 500 },
+    { key: "otherCosts", label: "Kantoor, huur, software, boekhouder", unit: "€/jaar", step: 500 },
+  ],
+  timeFields: [
+    { key: "workers", label: "Productieve personen (incl. jij)", unit: "pers." },
+    { key: "hoursPerDay", label: "Werkuren per dag", unit: "uur" },
+    { key: "vacationDays", label: "Vakantiedagen", unit: "dagen" },
+    { key: "sickDays", label: "Ziektedagen", unit: "dagen" },
+    { key: "holidays", label: "Feestdagen", unit: "dagen" },
+    { key: "billableSharePercent", label: "Declarabel deel van de tijd", unit: "%" },
+    { key: "profitPercent", label: "Winst & risico", unit: "%" },
+  ],
+  netLabel: "Je minimale uurtarief (excl. btw)",
+  grossSuffix: "incl. 21% btw",
+  rowCostOnly: "Alleen kostendekkend (zonder winst)",
+  rowAnnualCosts: "Jaarlijkse kosten",
+  rowBillableHours: "Declarabele uren / jaar",
+  rowWorkDays: "Werkdagen per persoon",
+  currentRateLabel: "Wat reken je nu per uur?",
+  gapPrefix: "Je zit ",
+  gapMid: " per uur onder je minimale tarief – dat is ongeveer ",
+  gapSuffix: " per jaar.",
+  okText: "Je huidige tarief dekt kosten en winst. 👍",
+  ai: {
+    button: "✨ Persoonlijk AI-advies",
+    loading: "AI analyseert je cijfers…",
+    error: "Het AI-advies is nu niet beschikbaar. Probeer het later opnieuw.",
+  },
+  lead: {
+    cta: "Download het uitgebreide PDF-rapport",
+    firstName: "Voornaam",
+    email: "E-mailadres *",
+    submit: "Rapport aanvragen",
+    sending: "Bezig met verzenden…",
+    thanks: "Bedankt",
+    received: "Je aanvraag is ontvangen.",
+    download: "📄 PDF-rapport downloaden",
+    consent: "Door te verzenden ga je ermee akkoord dat we per e-mail contact met je opnemen. Afmelden kan altijd.",
+    error: "Verzenden mislukt. Probeer het later opnieuw.",
+  },
+};
+
+export const DICTIONARIES: Record<Locale, Dictionary> = { de, it, en, es, nl };
