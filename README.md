@@ -4,9 +4,9 @@
 
 A free hourly-rate calculator for craft businesses. Owners enter their yearly costs and working time and instantly see the **minimum hourly rate** they need to cover costs and make a profit, plus how much revenue they lose per year at their current price. A personalized AI recommendation and a PDF report turn the result into a qualified lead in HubSpot.
 
-I built it as a small growth experiment for the *Working Student GTM AI Growth Engineering* role at plancraft, to show how I would approach the job: ship a working tool, connect it to the CRM, measure the funnel, and define what to test next.
+I built it as a self-initiated growth experiment to practise the full loop of AI-powered acquisition: ship a working tool, connect it to the CRM, measure the funnel, and define what to test next.
 
-> Demo project – not affiliated with plancraft. Built with Claude as an AI coding assistant; every part was reviewed and tested by me.
+> Personal demo project – not affiliated with any software vendor. Built with Claude as an AI coding assistant; every part was reviewed and tested by me.
 
 ---
 
@@ -69,7 +69,7 @@ German, Italian, English, Spanish and Dutch – each with its own copy, number f
 
 **Kill criteria:** < 3 % conversion after 300 calculations, or leads mostly tier C (not relevant for sales) → stop or change the offer
 
-**Status:** built and tested end-to-end; no real traffic yet (demo for an application).
+**Status:** built and tested end-to-end; no real traffic yet (portfolio demo).
 
 ## Next experiments (ICE-prioritized)
 
@@ -77,7 +77,7 @@ German, Italian, English, Spanish and Dutch – each with its own copy, number f
 |---|---|---|---|---|---|
 | 1 | Show the yearly revenue gap *before* the email form vs. only after (A/B test) | 8 | 6 | 8 | 7.3 |
 | 2 | Trade-specific defaults (electrician, plumber, painter) via URL, e.g. `?trade=elektro` | 7 | 6 | 7 | 6.7 |
-| 3 | Automated follow-up email in HubSpot for tier-A leads with a plancraft trial offer | 9 | 6 | 5 | 6.7 |
+| 3 | Automated follow-up email in HubSpot for tier-A leads with a software trial offer | 9 | 6 | 5 | 6.7 |
 | 4 | Polish version + market-specific defaults (wages, holidays) per country | 6 | 6 | 7 | 6.3 |
 | 5 | "Quote checker": upload a quote, AI flags missing or underpriced items | 9 | 5 | 3 | 5.7 |
 
